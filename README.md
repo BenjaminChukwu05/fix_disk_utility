@@ -135,3 +135,5 @@ A real UEFI boot test on the ThinkPad established that:
 See [Evidence register](docs/evidence.md) for a claim-by-claim map of the private sources, and [Publication checklist](docs/publication-checklist.md) before adding screenshots or command extracts. The raw terminal ZIP, client files, disk-image backups, and detailed local paths should **not** be committed to this public repository.
 
 **Limitations:** This case study combines the recorded Fedora session with separately provided Windows command transcripts and the final user-observed boot test. It does not contain a full raw Windows recording. A passing functional test does not prove the utility disk will remain reliable indefinitely.
+
+[Selected sanitized technical evidence](docs/selected-evidence.md)
