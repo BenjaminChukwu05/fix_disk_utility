@@ -3,13 +3,13 @@
 **Cross-platform IT support case study | Fedora Linux + Windows 11 | October 2026**  
 **Outcome:** Filesystem repair and Ventoy boot functionality verified; separate aging HDD repurposed for non-critical use.
 
-> **Scope and consent:** This case involved two distinct external drives. The owner of the previously encrypted HDD authorized its contents to be discarded. No BitLocker credentials were recovered or bypassed. Identifying information and client files are intentionally excluded from this public draft.
+> **Scope and consent:** This case involved two distinct external drives. The owner of the previously encrypted HDD authorized its contents to be discarded. No BitLocker credentials were recovered or bypassed. Identifying information and client files are intentionally excluded from this public case study.
 
 ## Problem
 
 A 1 TB Ventoy USB drive used for IT support repeatedly triggered Windows disk-health warnings. The tool needed to remain usable as a bootable multi-ISO utility drive, and its existing contents included client backups and other working files. The repair had to preserve that data.
 
-Separately, a roughly 500 GB Toshiba USB HDD was BitLocker-encrypted and no longer needed for its original purpose. The recovery credentials were unavailable, but its former owner had authorized complete reuse. The drive also had concerning SMART history, so it was not selected as the primary destination for irreplaceable backup data.
+Separately, a roughly 500 GB Toshiba USB HDD was BitLocker-encrypted and no longer needed for its original purpose. The recovery credentials were unavailable, but the client who supplied the drive had authorized its complete erasure and reuse. The drive also had concerning SMART history, so it was not selected as the primary destination for irreplaceable backup data.
 
 ## Systems and tools
 
@@ -134,4 +134,4 @@ A real UEFI boot test on the ThinkPad established that:
 
 See [Evidence register](docs/evidence.md) for a claim-by-claim map of the private sources, and [Publication checklist](docs/publication-checklist.md) before adding screenshots or command extracts. The raw terminal ZIP, client files, disk-image backups, and detailed local paths should **not** be committed to this public repository.
 
-**Limitations:** The GitHub draft combines the recorded Fedora session with separately provided Windows command transcripts and the final user-observed boot test. It does not contain a full raw Windows recording. A passing functional test does not prove the utility disk will remain reliable indefinitely.
+**Limitations:** This case study combines the recorded Fedora session with separately provided Windows command transcripts and the final user-observed boot test. It does not contain a full raw Windows recording. A passing functional test does not prove the utility disk will remain reliable indefinitely.
