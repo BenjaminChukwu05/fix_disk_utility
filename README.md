@@ -3,7 +3,7 @@
 **Cross-platform IT support case study | Fedora Linux + Windows 11 | October 2026**  
 **Outcome:** Filesystem repair and Ventoy boot functionality verified; separate aging HDD repurposed for non-critical use.
 
-> **Scope and consent:** This case involved two distinct external drives. The owner of the previously encrypted HDD authorized its contents to be discarded. No BitLocker credentials were recovered or bypassed. Identifying information and client files are intentionally excluded from this public case study.
+> **Scope and consent:** This case involved two distinct external drives. The client who supplied the previously BitLocker-encrypted HDD authorized its erasure and reuse. No BitLocker credentials were recovered or bypassed. Identifying information and client files are intentionally excluded from this public case study.
 
 ## Problem
 
