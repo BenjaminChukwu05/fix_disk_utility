@@ -29,14 +29,21 @@
 - [ ] Bink Video detection means recognizable header, not proven playable recovered video
 - [ ] Windows `chkdsk` result is from a separate chat transcript, not this Fedora ZIP
 - [ ] Ventoy boot functionality is based on the confirmed menu/ISO test, not a captured automated test
+- [ ] The HDD's full ddrescue **read** pass did not establish long-term reliability or complete write integrity
+- [ ] Four extended SMART tests were **aborted by host**, not passed or confirmed media failures
+- [ ] The copied client backup was checksum-verified, but completeness against the original laptop was not established
+- [ ] Client handover and a dependable additional backup remain outstanding; the Ventoy copy is temporary
+- [ ] The Fedora backup was removed only after the other copies were checked; the released-space figure comes from rounded filesystem accounting
 
 ## Suggested repository layout
 
 ```text
 fix_disk_utility/
 ├── README.md
+├── .gitignore
 └── docs/
     ├── evidence.md
+    ├── selected-evidence.md
     └── publication-checklist.md
 ```
 
