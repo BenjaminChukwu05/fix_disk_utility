@@ -1,7 +1,7 @@
 # Encrypted HDD Repurposing and Ventoy exFAT Recovery
 
 **Cross-platform IT support case study | Fedora Linux + Windows 11 | October 2026**  
-**Outcome:** Filesystem repair and Ventoy boot functionality verified; separate aging HDD repurposed for non-critical use.
+**Outcome:** Ventoy exFAT repaired and boot-tested; an aging HDD read-scanned in full, used for a checksum-verified client-backup copy, and retained only with a separate copy of that data. Temporary Fedora staging data was subsequently removed.
 
 > **Scope and consent:** This case involved two distinct external drives. The client who supplied the previously BitLocker-encrypted HDD authorized its erasure and reuse. No BitLocker credentials were recovered or bypassed. Identifying information and client files are intentionally excluded from this public case study.
 
@@ -21,7 +21,7 @@ Separately, a roughly 500 GB Toshiba USB HDD was BitLocker-encrypted and no long
 | ~1 TB Ventoy external USB disk | Main IT utility drive requiring filesystem repair |
 | Internal Fedora NVMe (LUKS + Btrfs) | Temporary destination for verified Ventoy backup |
 
-Tools: `lsblk`, `smartctl`, `journalctl`, `sgdisk`, `partprobe`, `mkfs.ntfs`, `rsync`, `sfdisk`, `dd`, `sha256sum`, `fsck.exfat`, Windows `chkdsk`, `fsutil`, and `Get-Volume`.
+Tools: `lsblk`, `smartctl`, `journalctl`, `sgdisk`, `partprobe`, `mkfs.ntfs`, `rsync`, GNU `ddrescue`/`ddrescuelog`, `sfdisk`, `dd`, `sha256sum`, `udisksctl`, `fsck.exfat`, Windows `chkdsk`, `fsutil`, and `Get-Volume`.
 
 ## Method and findings
 
@@ -38,7 +38,7 @@ SMART findings included:
 - The extended self-test was **aborted by the host with 90% remaining**; it did **not** complete and must not be reported as a passed surface scan.
 - Kernel logs also captured USB disconnects and an I/O read error involving the external HDD. The exact reason the long self-test aborted was not established.
 
-**Decision:** Reuse the HDD as an authorized, non-critical scratch disk, but do not rely on it as the only safe copy of the Ventoy files.
+**Initial decision:** Reuse the HDD cautiously as non-critical scratch storage, not as the sole destination for the Ventoy recovery backup. A later client-backup copy was made to this HDD only while a second copy remained on the repaired Ventoy drive.
 
 ### 2. Remove the encrypted layout without decrypting its contents
 
@@ -107,20 +107,72 @@ A real UEFI boot test on the ThinkPad established that:
 - ISO files were visible.
 - A test ISO started successfully.
 
-**Result:** The original utility drive was functioning as bootable Ventoy media again, with Windows filesystem checks clean and the pre-repair backup preserved. No Ventoy rebuild was necessary.
+**Result:** The utility drive was functioning as bootable Ventoy media again, with Windows filesystem checks clean. The pre-repair Fedora backup was retained through further verification, then removed in a later cleanup phase. No Ventoy rebuild was necessary.
+
+### 7. Investigate the HDD further and complete a full surface-read assessment
+
+In a follow-up Fedora session, an initial **1 GiB file write, SHA-256 comparison, and post-remount byte comparison passed**. The drive's existing SMART defects persisted: **48 reallocated sectors**, **6 reallocation events**, **0 pending sectors**, **0 offline uncorrectable sectors**, and **3 historical UDMA CRC errors**.
+
+An alternative USB-to-SATA adapter was tried after earlier connection difficulties. Across the case, **four extended SMART self-tests were recorded as “Aborted by host,” each with 90% remaining**. These were inconclusive tests, **not** completed surface scans or reported unreadable-sector failures. The precise cause of the aborts was not isolated.
+
+To test actual readability independently, GNU `ddrescue` read the HDD in resumable, read-only segments, sending data to `/dev/null` and recording coverage in a *diagnostic-only* mapfile on Fedora. The completed mapfile reported:
+
+```text
+Mapfile extent: 500107 MB
+Rescued/read:   500107 MB (100%)
+Non-tried:      0 B
+Bad-sector:     0 B
+Read errors:    0
+```
+
+The full logical address range was readable during this assessment. This does **not** reverse the drive's historical remapped sectors, establish its future reliability, or constitute a full-disk write verification.
+
+### 8. Transfer and checksum-verify the client backup
+
+A **pre-existing laptop backup folder**, staged inside the verified Fedora recovery copy, was copied to the Toshiba's NTFS volume. This was a transfer of the available *backup dataset*, not proof that every file from the original laptop had been captured.
+
+| Transfer metric | Recorded result |
+|---|---:|
+| Regular files copied | 97,632 |
+| Directories counted | 22,329 |
+| File data | 152.10 GB (about 142 GiB apparent size) |
+| Copy elapsed time | 2 h 19 min |
+| Post-copy `rsync -rci --dry-run --delete` exit code | `0` |
+| Verification difference-log lines | `0` |
+
+After `sync` and unmount/remount, the checksum-based comparison found no differences between the staged source and HDD copy. Subsequent SMART readings were unchanged and the filtered kernel log contained no new matching disk errors.
+
+**Retention decision:** The repaired Ventoy drive still holds the client's backup as a temporary second copy. The older Toshiba is **not** approved as its sole long-term home. Client handover and an independent, dependable backup arrangement remain **pending**.
+
+### 9. Remove verified temporary Fedora staging data
+
+Once the Ventoy copy was confirmed present and the HDD copy had passed checksum verification, the technician explicitly authorized removal of the complete Fedora `Ventoy-Recovery` staging directory. The deletion was guarded by exact-path and filesystem checks; an initial interactive removal was interrupted, then the remainder was removed. The directory's absence was verified afterward.
+
+| Fedora storage | Before | After |
+|---|---:|---:|
+| Used (rounded `df -h`) | 611 GiB | 347 GiB |
+| Available (rounded `df -h`) | 319 GiB | 582 GiB |
+| Usage | 66% | 38% |
+
+**Observed available-space increase: approximately 263 GiB.** The separate recovery metadata, recovered fragments, and diagnostic logs were not part of the deleted directory. The working Ventoy disk and its client backup were not deleted.
 
 ## Final status
 
 | Workstream | Outcome |
 |---|---|
-| Encrypted HDD partition removal and NTFS reuse | Completed; **non-critical use only** |
-| HDD long-term reliability | **Not established**; concerning SMART/USB history |
+| Encrypted HDD partition removal and NTFS reuse | Completed; prior encrypted layout discarded, not decrypted |
+| HDD full read-only assessment | **500.1 GB read; zero errors** in the ddrescue diagnostic mapfile |
+| Extended HDD SMART self-tests | Four **host-aborted**, not completed |
+| HDD long-term reliability | **Not established**; 48 historical reallocated sectors |
 | Full Ventoy data backup | Completed and checksum-verified |
 | exFAT allocation bitmap repair | Completed with Windows CHKDSK |
 | Dirty flag and Windows health state | Cleared / Healthy |
 | Post-repair file-content comparison | No mismatches in original files; 2 additional recovered fragments |
 | Recovered `.CHK` fragments | Copied and byte-verified separately |
 | Ventoy UEFI boot and ISO launch | Passed |
+| Client backup copied to Toshiba | 97,632 files; checksum verification found **zero differences** |
+| Temporary Fedora recovery backup | Deleted after checks; about **263 GiB additional available space** |
+| Client handover and durable second backup | **Outstanding**; temporary second copy remains on Ventoy |
 
 ## Lessons
 
@@ -129,11 +181,13 @@ A real UEFI boot test on the ThinkPad established that:
 3. **Compare diagnostics across operating systems.** Linux `fsck.exfat` and Windows CHKDSK reached different conclusions on the same volume.
 4. **Read-only checks and exit codes are evidence, not guarantees.** Verify the byte contents and the actual boot workflow separately.
 5. **Preserve recovery artifacts without overstating them.** CHKDSK `.CHK` files may contain orphaned data, but a signature alone does not establish their original use or integrity.
+6. **Separate internal self-test failures from real read coverage.** A host-aborted SMART test is inconclusive; a completed read-only scan establishes current readability but not future reliability.
+7. **Close the data-retention loop.** Verify transfers before deleting staging copies, and retain an independent copy when the client destination is an aging drive.
 
 ## Evidence and privacy
 
 See [Evidence register](docs/evidence.md) for a claim-by-claim map of the private sources, and [Publication checklist](docs/publication-checklist.md) before adding screenshots or command extracts. The raw terminal ZIP, client files, disk-image backups, and detailed local paths should **not** be committed to this public repository.
 
-**Limitations:** This case study combines the recorded Fedora session with separately provided Windows command transcripts and the final user-observed boot test. It does not contain a full raw Windows recording. A passing functional test does not prove the utility disk will remain reliable indefinitely.
+**Limitations:** This case study combines Fedora recordings, separately provided Windows command transcripts, and a user-observed boot test. It does not contain a full raw Windows recording. The Toshiba's complete read test establishes readability only at assessment time. The pre-existing client backup may have collection gaps, and client handover and a reliable independent backup are not yet verified.
 
 [Selected sanitized technical evidence](docs/selected-evidence.md)
