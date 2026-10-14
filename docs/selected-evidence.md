@@ -145,12 +145,81 @@ FILE0001.CHK: VERIFIED
 
 The functional test and Windows filesystem checks support the conclusion that the utility drive was usable again **at test time**. They do not prove future hardware reliability.
 
+## 7. Follow-up HDD testing and full read-only scan
+
+**Source:** Fedora continuation recording, October 13–14. A 1 GiB test file was copied to the Toshiba, with matching SHA-256 and `cmp` results both initially and after remounting the NTFS volume.
+
+SMART self-test log, summarized without device identifiers:
+
+```text
+Extended offline    Aborted by host    90% remaining
+Extended offline    Aborted by host    90% remaining
+Extended offline    Aborted by host    90% remaining
+Extended offline    Aborted by host    90% remaining
+```
+
+A replacement USB-to-SATA adapter was used during troubleshooting. These are **inconclusive internal self-tests**, not confirmed media-read failures. The cause of the host-aborted tests was not established.
+
+GNU `ddrescue` then read the *entire device* in successive resumable segments using a mapfile. The output was `/dev/null`, so **no recoverable disk image was created**. The final cumulative mapfile status was:
+
+```text
+Mapfile extent: 500107 MB
+non-tried:            0 B  (0%)
+rescued:      500107 MB  (100%)
+non-trimmed:          0 B
+non-scraped:          0 B
+bad-sector:           0 B
+```
+
+The final segment ended with `read errors: 0`. SMART still reported **48 reallocated sectors**, **6 reallocation events**, **0 pending**, **0 offline uncorrectable**, and **3 UDMA CRC errors**. A full read pass does not certify the drive for long-term unique storage.
+
+## 8. Client backup copied to the aging HDD
+
+**Source:** Fedora continuation recording. The source was a previously staged laptop-backup folder, not the entire set of files that could have existed on the original client computer.
+
+Selected `rsync` results:
+
+```text
+Number of files:             119,961 (reg: 97,632, dir: 22,329)
+Number of regular files transferred: 97,632
+Total file size:             152.10G bytes
+Total transferred file size: 152.10G bytes
+Elapsed transfer:            2h 19m (approx.)
+```
+
+After synchronizing and remounting the HDD, a full checksum dry-run compared the staged source and destination:
+
+```text
+Verification exit code: 0
+Difference log lines:   0
+```
+
+The comparison verifies the transferred dataset's contents at that time. It does **not** guarantee that the aging HDD will remain reliable or that earlier backup collection was complete.
+
+## 9. Post-verification staging cleanup
+
+**Source:** Fedora continuation recording and technician authorization. After confirming the repaired Ventoy drive still held the client backup and checking the new HDD copy, the temporary Fedora recovery staging directory was removed.
+
+```text
+Fedora storage       Before      After
+Used                 611 GiB     347 GiB
+Available            319 GiB     582 GiB
+Filesystem usage       66%        38%
+
+Target absence check: PASS
+```
+
+The rounded `df` values show approximately **263 GiB more available space**. A separate metadata backup, recovered fragments, and diagnostic files were outside the removed directory.
+
+**Handover boundary:** At the time of this case update, the client's HDD had not yet been confirmed handed over, and a reliable independent backup had not been arranged. The repaired Ventoy drive retained a temporary additional copy of the client dataset.
+
 ## Evidence boundaries
 
 - Raw recordings and client data remain private.
 - Commands involving `/dev/sda` and `D:` are historical examples only; device assignments can change.
 - BitLocker partition removal did not recover credentials or decrypt files, nor did quick formatting securely overwrite every sector.
-- The Toshiba HDD's historical media/USB issues remain unresolved; it should not be relied on as the only copy of important data.
+- The Toshiba HDD's historical reallocated sectors and repeatedly host-aborted SMART tests remain unresolved; despite a complete successful read pass, it should not be the only copy of important data.
+- The client-backup folder was verified as transferred; completeness against the original client laptop was not established. Final handover and a dependable independent backup are still pending.
 - The Windows repair transcript and manual ISO test have a different provenance from the Fedora recording archive.
 
-[Selected sanitized command evidence](docs/selected-evidence.md)
+[Return to the case study](../README.md)
