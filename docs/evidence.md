@@ -20,6 +20,13 @@ This register records which findings were observed in the supplied **Fedora reco
 | Recovered fragment signatures and sizes | `segments/2026-10-12-190826/terminal.raw` | `file` identified one Bink Video header; other unknown |
 | Both `.CHK` fragments separately copied and compared | `segments/2026-10-12-190826/terminal.raw` | `cmp`: both VERIFIED |
 | Ventoy menu, ISO visibility, ISO boot | User-confirmed functional boot-test outcome in conversation | No captured BIOS screenshots or video supplied in this ZIP |
+| HDD 1 GiB write/read, checksum and post-remount comparison | `segments/2026-10-13-124639/terminal.raw` | Byte match observed; limited coverage only |
+| Four aborted long SMART tests, all at 90% remaining | `segments/2026-10-13-124639/terminal.raw`, `smartctl -l selftest` | Confirmed inconclusive tests; reason not determined |
+| Full 500,107 MB ddrescue read assessment, zero read errors | `segments/2026-10-13-124639/terminal.raw`, `ddrescuelog --show-status` | Complete logical read coverage; diagnostic mapfile writes data to /dev/null, not an image |
+| Client-backup rsync copy: 97,632 regular files / 152.10 GB | `segments/2026-10-13-124639/terminal.raw` | Transfer output observed; original laptop collection completeness not established |
+| Post-copy checksum verification: exit 0, empty log | `segments/2026-10-13-124639/terminal.raw` | Original staged source matched the Toshiba destination |
+| Fedora staging directory removed; available space 319 -> 582 GiB | `segments/2026-10-13-124639/terminal.raw` | Deletion target absent afterward; storage values from rounded df output |
+| Temporary client backup remains on Ventoy | Fedora directory presence/size checks and user confirmation | Retention verified as present, not a new full checksum audit; client handover pending |
 
 ## Archive contents reviewed
 
@@ -32,11 +39,14 @@ fix_disk_utility/
     ├── 2026-10-12-190705/
     │   ├── terminal.raw
     │   └── timing.log
-    └── 2026-10-12-190826/
+    ├── 2026-10-12-190826/
+    │   ├── terminal.raw
+    │   └── timing.log
+    └── 2026-10-13-124639/
         ├── terminal.raw
         └── timing.log
 ```
 
-The first continuation was a recorder-resumption check. The second continuation contains the post-CHKDSK checksum comparison, fragment inspection, preservation, and final unmount.
+The first continuation was a recorder-resumption check. The second covers post-CHKDSK fragment checks. The October 13 continuation covers repeated HDD tests, a full read-only scan, a client-backup transfer and verification, and Fedora backup cleanup. The raw archive also includes unrelated personal workstation maintenance; that is intentionally excluded from the public case narrative.
 
 **Editorial note:** The raw terminal capture contains many progress-line updates and terminal escape/control sequences; treat `commands.log` as the navigation index, not as a complete proof of command outcomes. Pair it with the corresponding terminal output and cross-platform transcripts.
