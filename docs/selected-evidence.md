@@ -211,7 +211,7 @@ Target absence check: PASS
 
 The rounded `df` values show approximately **263 GiB more available space**. A separate metadata backup, recovered fragments, and diagnostic files were outside the removed directory.
 
-**Handover boundary:** At the time of this case update, the client's HDD had not yet been confirmed handed over, and a reliable independent backup had not been arranged. The repaired Ventoy drive retained a temporary additional copy of the client dataset.
+**Handover follow-up:** The technician subsequently confirmed that the HDD was handed over to the client. This is a user-reported outcome, not an event recorded in the terminal session. Client-side verification of file access and a dependable independent backup remain unconfirmed. The repaired Ventoy drive held an additional temporary copy at the last recorded inspection.
 
 ## Evidence boundaries
 
@@ -219,7 +219,7 @@ The rounded `df` values show approximately **263 GiB more available space**. A s
 - Commands involving `/dev/sda` and `D:` are historical examples only; device assignments can change.
 - BitLocker partition removal did not recover credentials or decrypt files, nor did quick formatting securely overwrite every sector.
 - The Toshiba HDD's historical reallocated sectors and repeatedly host-aborted SMART tests remain unresolved; despite a complete successful read pass, it should not be the only copy of important data.
-- The client-backup folder was verified as transferred; completeness against the original client laptop was not established. Final handover and a dependable independent backup are still pending.
+- The client-backup folder was verified as transferred; completeness against the original client laptop was not established. Physical handover was subsequently confirmed by the technician, but client-side access and a dependable independent backup are not confirmed.
 - The Windows repair transcript and manual ISO test have a different provenance from the Fedora recording archive.
 
 [Return to the case study](../README.md)
