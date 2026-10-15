@@ -26,7 +26,8 @@ This register records which findings were observed in the supplied **Fedora reco
 | Client-backup rsync copy: 97,632 regular files / 152.10 GB | `segments/2026-10-13-124639/terminal.raw` | Transfer output observed; original laptop collection completeness not established |
 | Post-copy checksum verification: exit 0, empty log | `segments/2026-10-13-124639/terminal.raw` | Original staged source matched the Toshiba destination |
 | Fedora staging directory removed; available space 319 -> 582 GiB | `segments/2026-10-13-124639/terminal.raw` | Deletion target absent afterward; storage values from rounded df output |
-| Temporary client backup remains on Ventoy | Fedora directory presence/size checks and user confirmation | Retention verified as present, not a new full checksum audit; client handover pending |
+| Temporary client backup remains on Ventoy at last inspection | Fedora directory presence/size checks and user confirmation | Presence verified at last check, not a new full checksum audit; retain until dependable alternative exists |
+| HDD physically handed over to client | Technician's subsequent confirmation in case conversation | Reported completed, not shown in terminal archive; independent backup and client-side file verification not confirmed |
 
 ## Archive contents reviewed
 
