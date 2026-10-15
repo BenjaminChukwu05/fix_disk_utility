@@ -32,7 +32,7 @@
 - [ ] The HDD's full ddrescue **read** pass did not establish long-term reliability or complete write integrity
 - [ ] Four extended SMART tests were **aborted by host**, not passed or confirmed media failures
 - [ ] The copied client backup was checksum-verified, but completeness against the original laptop was not established
-- [ ] Client handover and a dependable additional backup remain outstanding; the Ventoy copy is temporary
+- [ ] HDD handover is confirmed by technician follow-up only; client-side file-access verification and a dependable additional backup are unconfirmed; the Ventoy copy is temporary
 - [ ] The Fedora backup was removed only after the other copies were checked; the released-space figure comes from rounded filesystem accounting
 
 ## Suggested repository layout
