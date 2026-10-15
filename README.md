@@ -142,7 +142,7 @@ A **pre-existing laptop backup folder**, staged inside the verified Fedora recov
 
 After `sync` and unmount/remount, the checksum-based comparison found no differences between the staged source and HDD copy. Subsequent SMART readings were unchanged and the filtered kernel log contained no new matching disk errors.
 
-**Retention decision:** The repaired Ventoy drive still holds the client's backup as a temporary second copy. The older Toshiba is **not** approved as its sole long-term home. Client handover and an independent, dependable backup arrangement remain **pending**.
+**Retention and handover:** The Toshiba HDD was subsequently handed over to the client, as confirmed by the technician in an October 2026 follow-up. The repaired Ventoy drive was confirmed to hold the client's backup as a temporary second copy at the last inspection. The older Toshiba is **not** considered a reliable sole long-term copy. Independent backup arrangements and client-side verification of file access remain **unconfirmed**.
 
 ### 9. Remove verified temporary Fedora staging data
 
@@ -172,7 +172,8 @@ Once the Ventoy copy was confirmed present and the HDD copy had passed checksum 
 | Ventoy UEFI boot and ISO launch | Passed |
 | Client backup copied to Toshiba | 97,632 files; checksum verification found **zero differences** |
 | Temporary Fedora recovery backup | Deleted after checks; about **263 GiB additional available space** |
-| Client handover and durable second backup | **Outstanding**; temporary second copy remains on Ventoy |
+| Client HDD handover | **Completed**, as reported by the technician after the recorded tests |
+| Client-side file access and dependable backup | **Not confirmed**; additional copy was retained on Ventoy at last check |
 
 ## Lessons
 
@@ -188,6 +189,6 @@ Once the Ventoy copy was confirmed present and the HDD copy had passed checksum 
 
 See [Evidence register](docs/evidence.md) for a claim-by-claim map of the private sources, and [Publication checklist](docs/publication-checklist.md) before adding screenshots or command extracts. The raw terminal ZIP, client files, disk-image backups, and detailed local paths should **not** be committed to this public repository.
 
-**Limitations:** This case study combines Fedora recordings, separately provided Windows command transcripts, and a user-observed boot test. It does not contain a full raw Windows recording. The Toshiba's complete read test establishes readability only at assessment time. The pre-existing client backup may have collection gaps, and client handover and a reliable independent backup are not yet verified.
+**Limitations:** This case study combines Fedora recordings, separately provided Windows command transcripts, and a user-observed boot test. It does not contain a full raw Windows recording. The Toshiba's complete read test establishes readability only at assessment time. The pre-existing client backup may have collection gaps, and independent client-side file access and a dependable backup arrangement have not been verified.
 
 [Selected sanitized technical evidence](docs/selected-evidence.md)
